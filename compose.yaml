@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: cowork-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: cowork
+      POSTGRES_PASSWORD: cowork_pass
+      POSTGRES_DB: cowork_db
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - cowork_pgdata:/var/lib/postgresql
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cowork -d cowork_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  adminer:
+    image: adminer:latest
+    container_name: cowork-adminer
+    restart: unless-stopped
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+
+    ports:
+      - "8080:8080"
+
+volumes:
+  cowork_pgdata:
