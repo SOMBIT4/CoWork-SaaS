@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "db:check": "node --env-file=.env.local database/scripts/check-db.mjs",
+    "db:migrate": "node --env-file=.env.local database/scripts/migrate.mjs",
+    "db:seed": "node --env-file=.env.local database/scripts/seed.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
