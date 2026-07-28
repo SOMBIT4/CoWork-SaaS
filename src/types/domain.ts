@@ -1,8 +1,6 @@
 /*
- * These constant arrays are the TypeScript equivalents of
- * the PostgreSQL enum values defined in the SQL migrations.
- *
- * Keep these values synchronized with the database enums.
+ * Keep these values synchronized with the PostgreSQL enums
+ * defined in database/migrations/0001_initial_schema.sql.
  */
 
 export const ORGANIZATION_ROLES = [
@@ -27,11 +25,6 @@ export const BOOKING_STATUSES = [
   "CANCELLED",
 ] as const;
 
-
-/*
- * These union types are generated from the arrays above.
- */
-
 export type OrganizationRole =
   (typeof ORGANIZATION_ROLES)[number];
 
@@ -44,17 +37,19 @@ export type ResourceType =
 export type BookingStatus =
   (typeof BOOKING_STATUSES)[number];
 
-
 /*
- * Represents the signed-in user's membership and organization
- * information after tenant authorization succeeds.
+ * The trusted tenant context returned only after:
+ *
+ * 1. Authentication succeeds.
+ * 2. The organization exists.
+ * 3. The user has a membership in that organization.
  */
-
 export interface OrganizationContext {
   organizationId: string;
   organizationName: string;
   organizationSlug: string;
   organizationTimezone: string;
+  organizationPlan: OrganizationPlan;
 
   membershipId: string;
   role: OrganizationRole;
@@ -62,45 +57,32 @@ export interface OrganizationContext {
   userId: string;
 }
 
-
-/*
- * Small organization representation used by organization
- * lists and the future organization switcher.
- */
-
 export interface OrganizationSummary {
   id: string;
   name: string;
   slug: string;
   timezone: string;
   plan: OrganizationPlan;
+
   membershipId: string;
   role: OrganizationRole;
 }
 
-
-/*
- * Shared representation of a coworking resource.
- */
-
 export interface Resource {
   id: string;
   organizationId: string;
+
   name: string;
   type: ResourceType;
   capacity: number;
   floor: string | null;
   description: string | null;
   isActive: boolean;
+
   createdByUserId: string;
   createdAt: Date;
   updatedAt: Date;
 }
-
-
-/*
- * Shared representation of a booking.
- */
 
 export interface Booking {
   id: string;
