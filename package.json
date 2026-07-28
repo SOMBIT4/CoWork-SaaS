@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "db:check": "node --env-file=.env.local database/scripts/check-db.mjs",
     "db:migrate": "node --env-file=.env.local database/scripts/migrate.mjs",
-    "db:seed": "node --env-file=.env.local database/scripts/seed.mjs"
+    "db:seed": "node --env-file=.env.local database/scripts/seed.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

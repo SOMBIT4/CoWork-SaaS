@@ -12,6 +12,17 @@ function isValidTimezone(timezone: string): boolean {
   }
 }
 
+export const organizationSlugSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(3, "Slug must contain at least 3 characters.")
+  .max(60, "Slug cannot exceed 60 characters.")
+  .regex(
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+    "Slug can contain lowercase letters, numbers, and single hyphens.",
+  );
+
 export const createOrganizationSchema = z.object({
   name: z
     .string()
@@ -25,16 +36,7 @@ export const createOrganizationSchema = z.object({
       "Organization name cannot exceed 120 characters.",
     ),
 
-  slug: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .min(3, "Slug must contain at least 3 characters.")
-    .max(60, "Slug cannot exceed 60 characters.")
-    .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      "Slug can contain lowercase letters, numbers, and single hyphens.",
-    ),
+  slug: organizationSlugSchema,
 
   timezone: z
     .string()
