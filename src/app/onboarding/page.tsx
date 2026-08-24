@@ -1,66 +1,48 @@
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
-import { logoutAction } from "@/server/actions/auth.actions";
+import { CreateOrganizationForm } from "@/components/organizations/create-organization-form";
+import { requireAuthenticatedUserId } from "@/server/authz/org-context";
+import { findFirstOrganizationForUser } from "@/server/repositories/organization.repository";
 
 export default async function OnboardingPage() {
-  const session = await auth();
+  const userId =
+    await requireAuthenticatedUserId();
 
-  if (!session?.user) {
-    redirect("/login");
+  /*
+   * Onboarding is only for users who do not yet
+   * belong to an organization.
+   */
+  const existingOrganization =
+    await findFirstOrganizationForUser(
+      userId,
+    );
+
+  if (existingOrganization) {
+    redirect(
+      `/${existingOrganization.slug}`,
+    );
   }
 
   return (
-    <main className="min-h-screen bg-neutral-50 px-4 py-16">
-      <section className="mx-auto max-w-2xl rounded-xl border bg-white p-8 shadow-sm">
-        <p className="text-sm font-medium text-neutral-500">
-          Authentication successful
-        </p>
+    <main className="flex min-h-screen items-center justify-center bg-neutral-50 px-4 py-12">
+      <section className="w-full max-w-lg rounded-xl border bg-white p-8 shadow-sm">
+        <div className="mb-8">
+          <p className="text-sm font-medium text-neutral-500">
+            CoWork
+          </p>
 
-        <h1 className="mt-2 text-3xl font-semibold">
-          Welcome,{" "}
-          {session.user.name ??
-            session.user.email ??
-            "CoWork user"}
-        </h1>
+          <h1 className="mt-2 text-2xl font-semibold">
+            Create your organization
+          </h1>
 
-        <p className="mt-4 text-neutral-600">
-          You are signed in. Organization
-          onboarding will be implemented in the
-          next project phase.
-        </p>
+          <p className="mt-2 text-sm text-neutral-600">
+            Set up your coworking workspace.
+            You will automatically become
+            its owner.
+          </p>
+        </div>
 
-        <dl className="mt-8 space-y-4 rounded-lg bg-neutral-50 p-5 text-sm">
-          <div>
-            <dt className="font-medium">
-              User ID
-            </dt>
-            <dd className="mt-1 break-all text-neutral-600">
-              {session.user.id}
-            </dd>
-          </div>
-
-          <div>
-            <dt className="font-medium">
-              Email
-            </dt>
-            <dd className="mt-1 text-neutral-600">
-              {session.user.email}
-            </dd>
-          </div>
-        </dl>
-
-        <form
-          action={logoutAction}
-          className="mt-8"
-        >
-          <button
-            type="submit"
-            className="rounded-md border px-4 py-2 font-medium hover:bg-neutral-50"
-          >
-            Sign out
-          </button>
-        </form>
+        <CreateOrganizationForm />
       </section>
     </main>
   );
