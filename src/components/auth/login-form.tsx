@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertCircle } from "lucide-react";
 import { useActionState } from "react";
 
 import {
@@ -27,7 +28,7 @@ export function LoginForm({
   return (
     <form
       action={formAction}
-      className="space-y-5"
+      className="space-y-6"
     >
       <input
         type="hidden"
@@ -38,16 +39,17 @@ export function LoginForm({
       {state.message ? (
         <div
           role="alert"
-          className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+          className="flex items-start gap-3 rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-400"
         >
-          {state.message}
+          <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+          <p>{state.message}</p>
         </div>
       ) : null}
 
       <div className="space-y-2">
         <label
           htmlFor="email"
-          className="text-sm font-medium"
+          className="text-sm font-medium text-white"
         >
           Email
         </label>
@@ -62,7 +64,7 @@ export function LoginForm({
           aria-invalid={
             Boolean(state.fieldErrors?.email)
           }
-          className="w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-black"
+          className="w-full rounded-xl border border-[#27272A] bg-[#111113] px-4 py-3 text-white placeholder:text-[#71717A] outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
           placeholder="owner@example.com"
         />
 
@@ -70,7 +72,7 @@ export function LoginForm({
           (error) => (
             <p
               key={error}
-              className="text-sm text-red-600"
+              className="text-sm text-rose-400"
             >
               {error}
             </p>
@@ -81,7 +83,7 @@ export function LoginForm({
       <div className="space-y-2">
         <label
           htmlFor="password"
-          className="text-sm font-medium"
+          className="text-sm font-medium text-white"
         >
           Password
         </label>
@@ -98,7 +100,7 @@ export function LoginForm({
               state.fieldErrors?.password,
             )
           }
-          className="w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-black"
+          className="w-full rounded-xl border border-[#27272A] bg-[#111113] px-4 py-3 text-white placeholder:text-[#71717A] outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
           placeholder="Your password"
         />
 
@@ -106,7 +108,7 @@ export function LoginForm({
           (error) => (
             <p
               key={error}
-              className="text-sm text-red-600"
+              className="text-sm text-rose-400"
             >
               {error}
             </p>
@@ -117,7 +119,7 @@ export function LoginForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-md bg-black px-4 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 font-semibold text-white shadow-lg shadow-blue-500/25 transition-all hover:shadow-xl hover:shadow-blue-500/40 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:shadow-lg"
       >
         {pending
           ? "Signing in..."
